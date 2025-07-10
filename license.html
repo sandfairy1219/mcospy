@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>라이선스 인증 - MCOSpy</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="license.css">
+</head>
+<body>
+    <div class="license-container">
+        <div class="license-dialog">
+            <header class="license-header">
+                <h1>🔒 라이선스 인증</h1>
+                <p>MCOSpy Frida Manager 사용을 위해 라이선스 코드를 입력하세요</p>
+            </header>
+
+            <main class="license-main">
+                <div class="form-group">
+                    <label for="license-code">라이선스 코드:</label>
+                    <input type="text" id="license-code" class="license-input" placeholder="라이선스 코드를 입력하세요" autocomplete="off">
+                </div>
+
+                <div class="button-group">
+                    <button id="verify-license" class="btn btn-primary">
+                        <span class="btn-text">인증하기</span>
+                        <span class="btn-loading" style="display: none;">확인 중...</span>
+                    </button>
+                    <button id="exit-app" class="btn btn-secondary">종료</button>
+                </div>
+
+                <div id="license-status" class="status-message" style="display: none;"></div>
+            </main>
+
+            <footer class="license-footer">
+                <p>&copy; 2024 MCOSpy. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        const licenseCodeInput = document.getElementById('license-code');
+        const verifyButton = document.getElementById('verify-license');
+        const exitButton = document.getElementById('exit-app');
+        const statusMessage = document.getElementById('license-status');
+        const btnText = document.querySelector('.btn-text');
+        const btnLoading = document.querySelector('.btn-loading');
+
+        // 엔터 키로 인증 실행
+        licenseCodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                verifyLicense();
+            }
+        });
+
+        // 인증 버튼 클릭
+        verifyButton.addEventListener('click', verifyLicense);
+
+        // 종료 버튼 클릭
+        exitButton.addEventListener('click', () => {
+            ipcRenderer.send('exit-app');
+        });
+
+        async function verifyLicense() {
+            const code = licenseCodeInput.value.trim();
+            
+            if (!code) {
+                showStatus('라이선스 코드를 입력하세요', 'error');
+                return;
+            }
+
+            setLoading(true);
+            
+            try {
+                const result = await ipcRenderer.invoke('verify-license', code);
+                
+                if (result.valid) {
+                    showStatus(`인증 성공! 만료일: ${new Date(result.expiresAt).toLocaleDateString()}`, 'success');
+                    setTimeout(() => {
+                        ipcRenderer.send('license-verified');
+                    }, 1500);
+                } else {
+                    showStatus(result.message, 'error');
+                }
+            } catch (error) {
+                showStatus('인증 중 오류가 발생했습니다', 'error');
+                console.error('License verification error:', error);
+            }
+            
+            setLoading(false);
+        }
+
+        function setLoading(loading) {
+            verifyButton.disabled = loading;
+            licenseCodeInput.disabled = loading;
+            
+            if (loading) {
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'inline';
+            } else {
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            }
+        }
+
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // 포커스 설정
+        window.addEventListener('DOMContentLoaded', () => {
+            licenseCodeInput.focus();
+        });
+    </script>
+</body>
+</html>

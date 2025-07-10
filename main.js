@@ -2,10 +2,13 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const LicenseVerifier = require('./license');
 
 let mainWindow;
+let licenseWindow;
 let fridaProcess = null;
 let adbProcess = null;
+let licenseVerifier = new LicenseVerifier();
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -37,12 +40,50 @@ function createWindow() {
   }
 }
 
-app.whenReady().then(() => {
-  createWindow();
+function createLicenseWindow() {
+  licenseWindow = new BrowserWindow({
+    width: 500,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    },
+    show: false,
+    resizable: false,
+    autoHideMenuBar: true,
+    titleBarStyle: 'default',
+    title: '라이선스 인증 - MCOSpy'
+  });
+
+  licenseWindow.setMenuBarVisibility(false);
+  licenseWindow.loadFile('license.html');
+
+  licenseWindow.once('ready-to-show', () => {
+    licenseWindow.show();
+  });
+
+  licenseWindow.on('closed', () => {
+    licenseWindow = null;
+    if (!mainWindow) {
+      app.quit();
+    }
+  });
+}
+
+app.whenReady().then(async () => {
+  // MongoDB 연결
+  const connected = await licenseVerifier.connect();
+  if (!connected) {
+    dialog.showErrorBox('데이터베이스 연결 실패', 'MongoDB에 연결할 수 없습니다. 네트워크 연결을 확인하세요.');
+    app.quit();
+    return;
+  }
+
+  createLicenseWindow();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+      createLicenseWindow();
     }
   });
 });
@@ -56,6 +97,10 @@ app.on('window-all-closed', () => {
     }
     if (adbProcess) {
       adbProcess.kill();
+    }
+    // MongoDB 연결 종료
+    if (licenseVerifier) {
+      licenseVerifier.disconnect();
     }
     app.quit();
   }
@@ -401,6 +446,31 @@ ipcMain.handle('stop-frida-process', async () => {
   return { success: false, message: 'No Frida process running' };
 });
 
+// 라이선스 검증 IPC 핸들러
+ipcMain.handle('verify-license', async (event, tokenCode) => {
+  try {
+    return await licenseVerifier.verifyLicense(tokenCode);
+  } catch (error) {
+    return {
+      valid: false,
+      message: '라이선스 검증 중 오류가 발생했습니다'
+    };
+  }
+});
+
+// 라이선스 검증 성공 시 메인 윈도우 생성
+ipcMain.on('license-verified', () => {
+  if (licenseWindow) {
+    licenseWindow.close();
+  }
+  createWindow();
+});
+
+// 앱 종료 요청
+ipcMain.on('exit-app', () => {
+  app.quit();
+});
+
 // 앱 종료 시 모든 프로세스 정리
 app.on('before-quit', () => {
   if (fridaProcess) {
@@ -408,6 +478,9 @@ app.on('before-quit', () => {
   }
   if (adbProcess) {
     adbProcess.kill();
+  }
+  if (licenseVerifier) {
+    licenseVerifier.disconnect();
   }
 });
 
