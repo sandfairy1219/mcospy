@@ -1,0 +1,356 @@
+/* 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* 헤더 스타일 */
+header {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* 카드 스타일 */
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.card h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* 상태 표시기 */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.status-text {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #95a5a6;
+    transition: all 0.3s ease;
+}
+
+.indicator.connected {
+    background-color: #27ae60;
+    box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+}
+
+.indicator.disconnected {
+    background-color: #e74c3c;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+}
+
+.indicator.running {
+    background-color: #f39c12;
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #1f618d);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #229954, #1e8449);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #7f8c8d, #707b7c);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #138496, #0f6674);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+}
+
+/* 폼 스타일 */
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    min-width: 120px;
+}
+
+.form-control {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #bdc3c7;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    min-width: 200px;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.form-control:read-only {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+}
+
+/* 출력 영역 */
+.output-area, .log-area {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+.log-area {
+    max-height: 300px;
+    background: #34495e;
+}
+
+.output-area:empty, .log-area:empty {
+    display: none;
+}
+
+/* 로그 메시지 스타일 */
+.log-success {
+    color: #2ecc71;
+}
+
+.log-error {
+    color: #e74c3c;
+}
+
+.log-warning {
+    color: #f39c12;
+}
+
+.log-info {
+    color: #3498db;
+}
+
+/* 스크롤바 스타일 */
+.output-area::-webkit-scrollbar, .log-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.output-area::-webkit-scrollbar-track, .log-area::-webkit-scrollbar-track {
+    background: #34495e;
+}
+
+.output-area::-webkit-scrollbar-thumb, .log-area::-webkit-scrollbar-thumb {
+    background: #7f8c8d;
+    border-radius: 4px;
+}
+
+.output-area::-webkit-scrollbar-thumb:hover, .log-area::-webkit-scrollbar-thumb:hover {
+    background: #95a5a6;
+}
+
+/* 푸터 스타일 */
+footer {
+    text-align: center;
+    color: white;
+    margin-top: 30px;
+    padding: 20px;
+    opacity: 0.8;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .form-group label {
+        min-width: auto;
+    }
+    
+    .form-control {
+        width: 100%;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+}
+
+/* 애니메이션 */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}
+
+/* 로딩 상태 */
+.btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    color: white;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "mcospy-frida-manager",
+  "version": "1.0.0",
+  "description": "BlueStacks ADB 연결 및 Frida 서버 관리 앱",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "electron",
+    "frida",
+    "adb",
+    "bluestacks"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+  },
+  "build": {
+    "appId": "com.mcospy.frida-manager",
+    "productName": "MCOSpy Frida Manager",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "renderer.js",
+      "index.html",
+      "styles.css",
+      "bypass.js",
+      "favicon.ico",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerLanguages": ["ko_KR", "en_US"],
+      "language": "2066",
+      "displayLanguageSelector": false,
+      "artifactName": "${productName} Setup ${version}.exe"
+    },
+    "compression": "maximum",
+    "publish": null
+  }
+}

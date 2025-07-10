@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCOSpy Frida Manager</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮MCOSPY</h1>
+            
+        </header>
+
+        <main>
+            <!-- ADB 연결 섹션 -->
+            <section class="card">
+                <h2>📱 ADB 연결</h2>
+                <div class="form-group">
+                    <label for="adb-address">ADB 주소:</label>
+                    <input type="text" id="adb-address" class="form-control" placeholder="127.0.0.1:5555" value="127.0.0.1:5555">
+                    <button id="reset-address" class="btn btn-secondary">기본값 복원</button>
+                </div>
+                <div class="status-indicator">
+                    <span id="adb-status" class="status-text">연결 상태 확인 중...</span>
+                    <div id="adb-indicator" class="indicator"></div>
+                </div>
+                <div class="button-group">
+                    <button id="check-adb" class="btn btn-primary">연결 상태 확인</button>
+                    <button id="connect-bluestacks" class="btn btn-success">BlueStacks 연결</button>
+                </div>
+                <div id="adb-output" class="output-area"></div>
+            </section>
+
+            <!-- Frida 서버 섹션 -->
+            <section class="card">
+                <h2>🔧 Frida 서버</h2>
+                <div class="status-indicator">
+                    <span id="frida-server-status" class="status-text">서버 상태 확인 중...</span>
+                    <div id="frida-server-indicator" class="indicator"></div>
+                </div>
+                <div class="button-group">
+                    <button id="check-frida-server" class="btn btn-primary">서버 상태 확인</button>
+                    <button id="start-frida-server" class="btn btn-success">서버 시작</button>
+                    <button id="upload-frida-server" class="btn btn-info">서버 업로드</button>
+                    <button id="check-permissions" class="btn btn-secondary">권한 확인</button>
+                </div>
+                <div id="frida-server-output" class="output-area"></div>
+            </section>
+
+            <!-- 앱 실행 섹션 -->
+            <section class="card">
+                <h2>🚀 앱 실행</h2>
+                <div class="form-group">
+                    <label for="cookie-value">쿠키 값:</label>
+                    <input type="text" id="cookie-value" class="form-control" placeholder="getCookie 결과 값 (자동으로 채워짐)" readonly>
+                    <button id="clear-cookie" class="btn btn-secondary">쿠키 지우기</button>
+                </div>
+                <div class="button-group">
+                    <button id="get-cookie" class="btn btn-info">1단계: 쿠키 가져오기</button>
+                    <button id="start-agent" class="btn btn-success" disabled>2단계: Agent 시작</button>
+                    <button id="check-frida" class="btn btn-secondary">Frida 확인</button>
+                    <button id="stop-app" class="btn btn-danger">앱 중지</button>
+                </div>
+                <div class="status-indicator">
+                    <span id="app-status" class="status-text">대기 중</span>
+                    <div id="app-indicator" class="indicator"></div>
+                </div>
+                <div id="app-output" class="output-area"></div>
+            </section>
+
+            <!-- 로그 섹션 -->
+            <section class="card">
+                <h2>📋 실시간 로그</h2>
+                <div class="button-group">
+                    <button id="clear-logs" class="btn btn-secondary">로그 지우기</button>
+                    <button id="save-logs" class="btn btn-info">로그 저장</button>
+                </div>
+                <div id="logs" class="log-area"></div>
+            </section>
+        </main>
+
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
